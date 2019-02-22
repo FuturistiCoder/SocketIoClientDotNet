@@ -47,7 +47,7 @@ namespace Quobject.SocketIoClientDotNet.Client
         private Uri Uri;
         private List<Parser.Packet> PacketBuffer;
         private ConcurrentQueue<On.IHandle> Subs;
-        private Quobject.EngineIoClientDotNet.Client.Socket.Options Opts;
+        internal Quobject.EngineIoClientDotNet.Client.Socket.Options Opts;
         private bool AutoConnect;
         private HashSet<Socket> OpeningSockets;
         /*package*/
@@ -202,7 +202,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             Quobject.EngineIoClientDotNet.Client.Socket socket = EngineSocket;
 
             ReadyState = ReadyStateEnum.OPENING;
-            OpeningSockets.Add(Socket(Uri.PathAndQuery));
+            OpeningSockets.Add(Socket(Uri.AbsolutePath));
             SkipReconnect = false;
 
             var openSub = SocketIoClientDotNet.Client.On.Create(socket, Engine.EVENT_OPEN, new ListenerImpl(() =>
@@ -484,7 +484,7 @@ namespace Quobject.SocketIoClientDotNet.Client
                     log2.Info("EasyTimer Reconnect finish");
                 }, (int)delay);
 
-                Subs.Enqueue(new On.ActionHandleImpl(timer.Stop));                
+                Subs.Enqueue(new On.ActionHandleImpl(timer.Stop));
             }
         }
 

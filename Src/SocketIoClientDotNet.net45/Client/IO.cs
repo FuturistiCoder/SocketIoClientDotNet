@@ -15,7 +15,7 @@ namespace Quobject.SocketIoClientDotNet.Client
 
         private IO()
         {
-            
+
         }
 
         public static Socket Socket(string uri)
@@ -31,7 +31,7 @@ namespace Quobject.SocketIoClientDotNet.Client
         public static Socket Socket(Uri uri)
         {
             return Socket(uri, null);
-        
+
         }
         public static Socket Socket(Uri uri, Options opts)
         {
@@ -60,14 +60,14 @@ namespace Quobject.SocketIoClientDotNet.Client
                 }
                 io = Managers[id];
             }
-            return io.Socket(uri.PathAndQuery);
+            return io.Socket(uri.AbsolutePath);
         }
 
 
         public class Options : Client.Options
         {
 
-            public bool ForceNew = true;            
+            public bool ForceNew = true;
             public bool Multiplex = true;
         }
     }

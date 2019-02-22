@@ -133,7 +133,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             return this;
         }
 
- 
+
         public Emitter Emit(string eventString, IAck ack, params object[] args)
         {
             var log = LogManager.GetLogger(Global.CallerName());
@@ -141,7 +141,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             var _args = new List<object> { eventString };
             if (args != null)
             {
-                _args.AddRange(args);                
+                _args.AddRange(args);
             }
 
             var jarray = new JArray(_args);
@@ -172,9 +172,14 @@ namespace Quobject.SocketIoClientDotNet.Client
             return Emit(eventString, new AckImpl(ack), args);
         }
 
-        public void Packet(Packet packet)
+        public void Packet(Packet packet, bool addQuery = false)
         {
             packet.Nsp = Nsp;
+
+            if (addQuery)
+            {
+                packet.Nsp = $"{packet.Nsp}?{_io.Opts.QueryString.TrimStart('?')}";
+            }
             _io.Packet(packet);
         }
 
@@ -183,7 +188,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             //var log = LogManager.GetLogger(Global.CallerName());
             if (Nsp != "/")
             {
-                Packet(new Packet(Parser.Parser.CONNECT));
+                Packet(new Packet(Parser.Parser.CONNECT, null), true);
             }
         }
 
@@ -233,7 +238,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             }
         }
 
- 
+
         private void OnEvent(Packet packet)
         {
             var log = LogManager.GetLogger(Global.CallerName());
@@ -265,7 +270,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             {
                 ReceiveBuffer = ReceiveBuffer.Enqueue(args);
             }
-        }  
+        }
 
         private class AckImp : IAck
         {
@@ -274,7 +279,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             private readonly bool[] sent = new[] {false};
 
             public AckImp(Socket socket, int id)
-            {                
+            {
                 this.socket = socket;
                 this.Id = id;
             }
@@ -330,7 +335,7 @@ namespace Quobject.SocketIoClientDotNet.Client
             }
             ReceiveBuffer = ReceiveBuffer.Clear();
 
-           
+
             while (SendBuffer.Count() > 0)
             {
                 Packet packet;
