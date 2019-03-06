@@ -16,15 +16,10 @@ steps:
     projects: $(projects)
     arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: pack
-    arguments: '--no-build --configuration $(buildConfiguration) $(projects)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: publish
-    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) $(projects)'
+- script: |
+    dotnet pack --no-build --configuration $(buildConfiguration) $(projects)
+    dotnet publish --no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) $(projects)
 
 - task: PublishBuildArtifacts@1
 
