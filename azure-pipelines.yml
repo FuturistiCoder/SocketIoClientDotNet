@@ -7,13 +7,30 @@ pool:
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
 
 steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: build
-    projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
+    projects: $(projects)
     arguments: '--configuration $(buildConfiguration)'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: pack
+    projects: $(projects)
+    arguments: '--no-build --configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    projects:  $(projects)
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
 - task: PublishBuildArtifacts@1
+
+
+
+
 
