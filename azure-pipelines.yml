@@ -1,0 +1,19 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'VS2017-Win2016'
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+
