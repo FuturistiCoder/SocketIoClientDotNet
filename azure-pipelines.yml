@@ -25,7 +25,10 @@ steps:
   inputs:
     command: pack
     packagesToPack: '$(projects)'
-#    versioningScheme: byPrereleaseNumber // bad idea?
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
+    versioningScheme: byPrereleaseNumber #bad idea?
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
