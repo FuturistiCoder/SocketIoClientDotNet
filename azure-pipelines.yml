@@ -5,23 +5,34 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
+  Major: '1'
+  Minor: '0'
+  Patch: '3'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
   inputs:
     command: build
     projects: $(projects)
     arguments: '--configuration $(buildConfiguration)'
 
+- task: NuGetCommand@2
+  displayName: 'nuget pack'
+  inputs:
+    command: pack
+    packagesToPack: '$(projects)'
+#    versioningScheme: byPrereleaseNumber // bad idea?
 
-- script: |
-    dotnet pack --no-build --configuration $(buildConfiguration) $(projects)
-    dotnet publish --no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) $(projects)
-
-- task: PublishBuildArtifacts@1
+- task: NuGetCommand@2
+  displayName: 'nuget push'
+  inputs:
+    command: push
+    publishVstsFeed: 'SocketIoClientDotNet_Feed'
+    allowPackageConflicts: true
 
 
 
