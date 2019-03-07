@@ -5,15 +5,48 @@ pool:
   vmImage: 'VS2017-Win2016'
 
 variables:
+  Major: '1'
+  Minor: '0'
+  Patch: '3'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
 
 steps:
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: 4.9.1
+    
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
   inputs:
     command: build
-    projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
+    projects: $(projects)
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
+    versioningScheme: byPrereleaseNumber
     arguments: '--configuration $(buildConfiguration)'
 
-- task: PublishBuildArtifacts@1
+- task: NuGetCommand@2
+  displayName: 'nuget pack'
+  inputs:
+    command: pack
+    packagesToPack: '$(projects)'
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
+    versioningScheme: byPrereleaseNumber
+    #bad idea?
+
+- task: NuGetCommand@2
+  displayName: 'nuget push'
+  inputs:
+    command: push
+    publishVstsFeed: 'SocketIoClientDotNet_Feed'
+    allowPackageConflicts: true
+
+
+
+
 
