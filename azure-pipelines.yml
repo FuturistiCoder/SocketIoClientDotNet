@@ -22,6 +22,10 @@ steps:
   inputs:
     command: build
     projects: $(projects)
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
+    versioningScheme: byPrereleaseNumber
     arguments: '--configuration $(buildConfiguration)'
 
 - task: NuGetCommand@2
