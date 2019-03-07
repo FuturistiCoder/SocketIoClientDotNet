@@ -13,6 +13,10 @@ variables:
   projects: 'Src/SocketIoClientDotNet.netstandard1.3/SocketIoClientDotNet.netstandard1.3.csproj'
 
 steps:
+- task: NuGetToolInstaller@0
+  inputs:
+    versionSpec: 4.x
+    
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
