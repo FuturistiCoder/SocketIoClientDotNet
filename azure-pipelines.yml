@@ -38,14 +38,12 @@ steps:
     versioningScheme: byPrereleaseNumber
     #bad idea?
     
-- task: DotNetCoreCLI@2
-  displayName: dotnet push
+- task: NuGetCommand@2
+  displayName: 'nuget push'
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'b7f35324-d762-4d16-b230-97690c4fc48c'
-
+    command: push
+    publishVstsFeed: 'FC_Feed'
+    allowPackageConflicts: true
 
 
 
