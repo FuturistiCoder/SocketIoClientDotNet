@@ -28,23 +28,23 @@ steps:
     versioningScheme: byPrereleaseNumber
     arguments: '--configuration $(buildConfiguration)'
 
-- task: NuGetCommand@2
-  displayName: 'nuget pack'
+- task: DotNetCoreCLI@2
   inputs:
-    command: pack
+    command: 'pack'
     packagesToPack: '$(projects)'
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
+    nobuild: true
+    includesymbols: true
     versioningScheme: byPrereleaseNumber
     #bad idea?
-
-- task: NuGetCommand@2
-  displayName: 'nuget push'
+    
+- task: DotNetCoreCLI@2
   inputs:
-    command: push
-    publishVstsFeed: 'FC_Feed'
-    allowPackageConflicts: true
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'b7f35324-d762-4d16-b230-97690c4fc48c'
+
+
 
 
 
