@@ -29,15 +29,17 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: dotnet pack
   inputs:
     command: 'pack'
     packagesToPack: '$(projects)'
     nobuild: true
-    includesymbols: true
+    includesymbols: false
     versioningScheme: byPrereleaseNumber
     #bad idea?
     
 - task: DotNetCoreCLI@2
+  displayName: dotnet push
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
