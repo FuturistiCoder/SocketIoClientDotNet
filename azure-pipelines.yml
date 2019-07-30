@@ -43,7 +43,7 @@ steps:
   displayName: 'nuget push'
   inputs:
     command: push
-    publishVstsFeed: 'SocketIoClientDotNet_Feed'
+    publishVstsFeed: 'FC_Feed'
     allowPackageConflicts: true
 
 
